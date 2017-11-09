@@ -24,7 +24,7 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 
 ## Info
 - Initially made to make dismantling device easier
-- Cannot use party chat and notice chat together
+- Cannot use party chat and notice chat together, adjusts automatically
 - WARNING : `rk lobby` may cause client to disconnect
 - WARNING : `rk boss num` may cause lobby teleportals to bug and/or client to disconnect
 
