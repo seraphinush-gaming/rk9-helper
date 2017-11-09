@@ -1,4 +1,4 @@
-# rk9hm-helper
+# rk9-helper
 tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 
 ## Usage
