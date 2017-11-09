@@ -23,7 +23,7 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - `num` is 1 to 3, instant move to boss
 
 ## Info
-- Initially made to make device easier
+- Initially made to make dismantling device easier
 - WARNING : `rk lobby` may cause client to disconnect
 - WARNING : `rk boss num` may cause lobby teleportals to bug and/or client to disconnect
 
