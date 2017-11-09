@@ -180,7 +180,7 @@ module.exports = function RK9Helper(dispatch) {
 
     function sendChat(msg) {
         dispatch.toServer('C_CHAT', {
-            channel: chatParty ? 1 : 21, // 1 = party, 21 = 
+            channel: chatParty ? 1 : 21, // 1 = party, 21 = party notice
             message: msg
         })
     }
