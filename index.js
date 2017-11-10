@@ -20,7 +20,9 @@ module.exports = function RK9Helper(dispatch) {
         prevZone = null,
         curZone = null
 
-    let chatNotice = false,
+    let channelNum = 0,
+        chatGuild = false,
+        chatNotice = false,
         chatParty = false,
         curBoss = 0,
         guideEnable = true,
@@ -40,7 +42,6 @@ module.exports = function RK9Helper(dispatch) {
     })
 
     function moveLocation(loc) {
-        if (!validState()) return
         dispatch.toClient('S_INSTANT_MOVE', 1, {
             id: cid,
             x: loc[0],
@@ -50,7 +51,7 @@ module.exports = function RK9Helper(dispatch) {
     }
 
     dispatch.hook('S_SPAWN_ME', 1, (event) => {
-        if (!validState()) return
+        if (!enable && !(RK9_ZONE.includes(curZone))) return
         if (prevZone != SAVAGE_REACH) return
         if (curZone == prevZone) return
         event.x = RK9_LOBBY[0],
@@ -61,12 +62,11 @@ module.exports = function RK9Helper(dispatch) {
 
     // RK-9 Kennel (hard) last boss guide code
     dispatch.hook('S_BOSS_GAGE_INFO', (event) => {
-        if (!validState()) return
+        if (!enable && !(RK9_ZONE.includes(curZone))) return
         curBoss = event.templateId
     })
 
     dispatch.hook('S_ACTION_STAGE', (event) => {
-        if (!validState()) return
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
         if (event.skill === START) {
@@ -75,7 +75,6 @@ module.exports = function RK9Helper(dispatch) {
     })
 
     dispatch.hook('S_ACTION_END', (event) => {
-        if (!validState()) return
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
         switch (event.skill) {
@@ -89,7 +88,7 @@ module.exports = function RK9Helper(dispatch) {
                 return
         }
         setTimeout(() => {
-            if (chatNotice || chatParty) {
+            if (channelNum != 0) {
                 sendChat(`Next : ` + messageA)
             } else {
                 send(`Next : ` + messageA)
@@ -99,7 +98,6 @@ module.exports = function RK9Helper(dispatch) {
 
     // initial message hook
     dispatch.hook('S_DUNGEON_EVENT_MESSAGE', (event) => {
-        if (!validState()) return
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
         let messageId = parseInt(event.message.replace('@dungeon:', ''))
@@ -117,18 +115,18 @@ module.exports = function RK9Helper(dispatch) {
             case 9935311:
                 previousMechFirst = true
                 setTimeout(() => {
-                    if (chatNotice || chatParty) {
-                        sendChat(messageA + `-> O`)
+                    if (channelNum != 0) {
+                        sendChat(messageA + ` -> O`)
                     } else {
-                        send(messageA + `-> O`)
+                        send(messageA + ` -> O`)
                     }
                 }, 2000)
                 break
             case 9935312:
                 previousMechFirst = false
                 setTimeout(() => {
-                    if (chatNotice || chatParty) {
-                        sendChat(`O ->` + messageA)
+                    if (channelNum != 0) {
+                        sendChat(`O -> ` + messageA)
                     } else {
                         send(`O ->` + messageA)
                     }
@@ -140,8 +138,8 @@ module.exports = function RK9Helper(dispatch) {
     })
 
     dispatch.hook('S_QUEST_BALLOON', 1, (event) => {
-        if (!validState()) return
         if (!guideEnable) return
+        if (curBoss != RK9_THIRD_BOSS) return
         let balloonId = parseInt(event.message.replace('@monsterBehavior:', ''))
         switch (balloonId) {
             // edit these three cases for translation
@@ -160,13 +158,13 @@ module.exports = function RK9Helper(dispatch) {
     // helper
     function mechOrder() {
         if (previousMechFirst) {
-            if (chatNotice || chatParty) {
+            if (channelNum != 0) {
                 sendChat(messageA + ` -> ` + messageB)
             } else {
                 send(messageA + ` -> ` + messageB)
             }
         } else {
-            if (chatNotice || chatParty) {
+            if (channelNum != 0) {
                 sendChat(messageB + ` -> ` + messageA)
             } else {
                 send(messageB + ` -> ` + messageA)
@@ -178,16 +176,11 @@ module.exports = function RK9Helper(dispatch) {
         command.message(`[rk9-helper] : ` + msg)
     }
 
-    function sendChat(msg) {
+    function sendChat(msg) {``
         dispatch.toServer('C_CHAT', {
-            channel: chatParty ? 1 : 21, // 1 = party, 21 = party notice
+            channel: channelNum, // 1 = party, 2 = guild, 21 = party notice
             message: msg
         })
-    }
-
-    // invariant
-    function validState() {
-        return enable && (RK9_ZONE.includes(curZone))
     }
 
     // command
@@ -204,6 +197,41 @@ module.exports = function RK9Helper(dispatch) {
             }
             if (!enable) {
                 send(`<font color="#FF0000">Offline.</font>`)
+                return
+            }
+            if (p1 == 'guide') {
+                guideEnable = !guideEnable
+                send(`Guide ${guideEnable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
+                return
+            }
+            if (p1 == 'guild') {
+                if (!guideEnable) {
+                    send(`<font color="#FF0000">Guide is disabled.</font>`)
+                    return
+                }
+                chatGuild = !chatGuild
+                chatGuild ? (channelNum = 2, chatNotice = false, chatParty = false) : channelNum = 0
+                send(`Message to guild chat ${chatGuild ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
+                return
+            }
+            if (p1 == 'notice') {
+                if (!guideEnable) {
+                    send(`<font color="#FF0000">Guide is disabled.</font>`)
+                    return
+                }
+                chatNotice = !chatNotice
+                chatNotice ? (channelNum = 21, chatGuild = false, chatParty = false) : channelNum = 0
+                send(`Message to notice chat ${chatNotice ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
+                return
+            }
+            if (p1 == 'party') {
+                if (!guideEnable) {
+                    send(`<font color="#FF0000">Guide is disabled.</font>`)
+                    return
+                }
+                chatParty = !chatParty
+                chatParty ? (channelNum = 1, chatGuild = false, chatNotice = false) : channelNum = 0
+                send(`Message to party chat ${chatParty ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
                 return
             }
             if (!(RK9_ZONE.includes(curZone))) {
@@ -225,11 +253,6 @@ module.exports = function RK9Helper(dispatch) {
                 send(`Instant move to <font color="#56B4E9">lobby</font><font>.</font>`)
                 return
             } 
-            if (p1 == 'guide') {
-                guideEnable = !guideEnable
-                send(`Guide ${guideEnable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
-                return
-            }
             if (p1 == 'boss' && !isNaN(p2)) {
                 if (p2 < 1 || p2 > 3) {
                     send(`<font color="#FF0000">Invalid number.</font>`)
@@ -239,26 +262,6 @@ module.exports = function RK9Helper(dispatch) {
                     send(`Instant move to boss <font color="#56B4E9">` + p2 + `</font><font> location.</font>`)
                     return
                 }
-            }
-            if (p1 == 'party') {
-                if (!guideEnable) {
-                    send(`<font color="#FF0000">Guide is disabled.</font>`)
-                    return
-                }
-                chatParty = !chatParty
-                if (chatNotice) { chatNotice = false }
-                send(`Message to party chat ${chatParty ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
-                return
-            }
-            if (p1 == 'notice') {
-                if (!guideEnable) {
-                    send(`<font color="#FF0000">Guide is disabled.</font>`)
-                    return
-                }
-                chatNotice = !chatNotice
-                if (chatParty) { chatParty = false }
-                send(`Message to notice chat ${chatNotice ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
-                return
             } else {
                 send(`<font color="#FF0000">Invalid argument.</font>`)
             }
