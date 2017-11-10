@@ -192,8 +192,9 @@ module.exports = function RK9Helper(dispatch) {
                 send(`RK-9 Hangar module ${enable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 send(`Status : 
                     <br> - Guide : ${guideEnable}
-                    <br> - Message to Party : ${chatParty}
-                    <br> - Message to Notice : ${chatNotice}`)
+                    <br> - Message to Guild : ${chatGuild}
+                    <br> - Message to Notice : ${chatNotice}
+                    <br> - Message to Party : ${chatParty}`)
                 return
             }
             if (!enable) {
