@@ -8,12 +8,15 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ### `rk guide`
 - Toggle RK-9 Kennel (hard) mechanic guide on/off
 - Default is on
-### `rk party`
-- Send mechanic order in party chat
+### `rk guild`
+- Send mechanic order in guild chat
 - Default is off
 ### `rk notice`
 - Send mechanic order in party notice chat
 - Requires party leader status
+- Default is off
+### `rk party`
+- Send mechanic order in party chat
 - Default is off
 ### `rk num`
 - `num` is 1 to 4, instant move to device
@@ -24,10 +27,14 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 
 ## Info
 - Initially made to make dismantling device easier
-- Cannot use party chat and notice chat together, adjusts automatically
+- Cannot use guild chat, party chat, and/or notice chat together- adjusts automatically
 - WARNING : `rk lobby` may cause client to disconnect
 - WARNING : `rk boss num` may cause lobby teleportals to bug and/or client to disconnect
 
-## Changelog 
+## Changelog
+### 1.1
+- Removed redundant code
+- Refined code
+- Added guild chat option
 ### 1.0
 - Initial commit
