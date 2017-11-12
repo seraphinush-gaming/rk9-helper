@@ -5,6 +5,8 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ### `rk`
 - Toggle on/off
 - Default is off
+### `status`
+- Send status of guide and messenger
 ### `rk guide`
 - Toggle RK-9 Kennel (hard) mechanic guide on/off
 - Default is on
@@ -32,6 +34,9 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - WARNING : `rk boss num` may cause lobby teleportals to bug and/or client to disconnect
 
 ## Changelog
+### 1.2
+- Added messenger for initial hook
+- Added `status` command
 ### 1.1
 - Removed redundant code
 - Refined code
