@@ -29,7 +29,8 @@ module.exports = function RK9Helper(dispatch) {
         guideEnable = true,
         messageA = '',
         messageB = '??',
-        previousMechFirst = true
+        previousMechFirst = true,
+        temp = ''
 
     // code
     dispatch.hook('S_LOGIN', (event) => { 
@@ -136,6 +137,14 @@ module.exports = function RK9Helper(dispatch) {
             default:
                 return
         }
+        // if first message
+        if (messageId != 9935311 || message !=  9935312) {
+            if (channelNum != 0 ) {
+                sendChat(`First : ` + messageA)
+            } else {
+                send(`First : ` + messageA)
+            }
+        }
     })
 
     dispatch.hook('S_QUEST_BALLOON', 1, (event) => {
@@ -189,16 +198,24 @@ module.exports = function RK9Helper(dispatch) {
         command.add('rk', (p1, p2) => {
             if (p1 === undefined) {
                 enable = !enable
+                if (chatGuild) { temp = 'Guild' }
+                else if (chatNotice) { temp = 'Notice' } 
+                else if (chatParty) { temp = 'Party' }
+                else { temp = 'Self' }
                 send(`RK-9 Hangar module ${enable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 send(`Status : 
                     <br> - Guide : ${guideEnable}
-                    <br> - Message to Guild : ${chatGuild}
-                    <br> - Message to Notice : ${chatNotice}
-                    <br> - Message to Party : ${chatParty}`)
+                    <br> - Message to : ${temp}`)
                 return
             }
             if (!enable) {
                 send(`<font color="#FF0000">Offline.</font>`)
+                return
+            }
+            if (p1 == 'status') {
+                send(`Status : 
+                <br> - Guide : ${guideEnable}
+                <br> - Message to : ${temp}`)
                 return
             }
             if (p1 == 'guide') {
