@@ -138,7 +138,7 @@ module.exports = function RK9Helper(dispatch) {
                 return
         }
         // if first message
-        if (messageId != 9935311 || message != 9935312) {
+        if (messageId != 9935311 || messageId != 9935312) {
             if (channelNum != 0) {
                 sendChat(`First : ` + messageA)
             } else {
@@ -203,7 +203,7 @@ module.exports = function RK9Helper(dispatch) {
                 else if (chatParty) { temp = 'Party' }
                 else { temp = 'Self' }
                 send(`RK-9 Hangar module ${enable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
-                send(`Status : 
+                send(`Status :
                     <br> - Guide : ${guideEnable}
                     <br> - Message to : ${temp}`)
                 return
@@ -213,9 +213,9 @@ module.exports = function RK9Helper(dispatch) {
                 return
             }
             if (p1 == 'status') {
-                send(`Status : 
-                <br> - Guide : ${guideEnable}
-                <br> - Message to : ${temp}`)
+                send(`Status : ${enable ? 'On' : 'Off'}
+                    <br> - Guide : ${guideEnable}
+                    <br> - Message to : ${temp}`)
                 return
             }
             if (p1 == 'guide') {
