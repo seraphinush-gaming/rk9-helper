@@ -28,9 +28,9 @@ module.exports = function RK9Helper(dispatch) {
         curBoss = 0,
         guideEnable = true,
         messageA = '',
-        messageB = '??',
+        messageB = 'O',
         previousMechFirst = true,
-        temp = ''
+        temp = 'Self'
 
     // code
     dispatch.hook('S_LOGIN', (event) => {
@@ -84,7 +84,7 @@ module.exports = function RK9Helper(dispatch) {
             case SECOND_OUT:
             case SECOND_SPD:
                 messageA = messageB,
-                messageB = '??'
+                messageB = 'O'
                 break
             default:
                 return
@@ -116,35 +116,14 @@ module.exports = function RK9Helper(dispatch) {
                 break
             case 9935311:
                 previousMechFirst = true
-                setTimeout(() => {
-                    if (channelNum != 0) {
-                        sendChat(messageA + ` -> O`)
-                    } else {
-                        send(messageA + ` -> O`)
-                    }
-                }, 2000)
                 break
             case 9935312:
                 previousMechFirst = false
-                setTimeout(() => {
-                    if (channelNum != 0) {
-                        sendChat(`O -> ` + messageA)
-                    } else {
-                        send(`O ->` + messageA)
-                    }
-                }, 2000)
                 break
             default:
                 return
         }
-        // if first message
-        if (messageId != 9935311 || messageId != 9935312) {
-            if (channelNum != 0) {
-                sendChat(`First : ` + messageA)
-            } else {
-                send(`First : ` + messageA)
-            }
-        }
+        setTimeout(mechOrder, 2000)
     })
 
     dispatch.hook('S_QUEST_BALLOON', 1, (event) => {
@@ -198,24 +177,20 @@ module.exports = function RK9Helper(dispatch) {
         command.add('rk', (p1, p2) => {
             if (p1 === undefined) {
                 enable = !enable
-                if (chatGuild) { temp = 'Guild' }
-                else if (chatNotice) { temp = 'Notice' }
-                else if (chatParty) { temp = 'Party' }
-                else { temp = 'Self' }
                 send(`RK-9 Hangar module ${enable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 send(`Status :
                     <br> - Guide : ${guideEnable}
                     <br> - Message to : ${temp}`)
                 return
             }
-            if (!enable) {
-                send(`<font color="#FF0000">Offline.</font>`)
-                return
-            }
             if (p1 == 'status') {
                 send(`Status : ${enable ? 'On' : 'Off'}
                     <br> - Guide : ${guideEnable}
                     <br> - Message to : ${temp}`)
+                return
+            }
+            if (!enable) {
+                send(`<font color="#FF0000">Offline.</font>`)
                 return
             }
             if (p1 == 'guide') {
@@ -229,7 +204,7 @@ module.exports = function RK9Helper(dispatch) {
                     return
                 }
                 chatGuild = !chatGuild
-                chatGuild ? (channelNum = 2, chatNotice = false, chatParty = false) : channelNum = 0
+                chatGuild ? (channelNum = 2, chatNotice = false, chatParty = false, temp = 'Guild') : (channelNum = 0, temp = 'Self')
                 send(`Message to guild chat ${chatGuild ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
                 return
             }
@@ -239,7 +214,7 @@ module.exports = function RK9Helper(dispatch) {
                     return
                 }
                 chatNotice = !chatNotice
-                chatNotice ? (channelNum = 21, chatGuild = false, chatParty = false) : channelNum = 0
+                chatNotice ? (channelNum = 21, chatGuild = false, chatParty = false, temp = 'Notice') : (channelNum = 0, temp = 'Self')
                 send(`Message to notice chat ${chatNotice ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 return
             }
@@ -249,7 +224,7 @@ module.exports = function RK9Helper(dispatch) {
                     return
                 }
                 chatParty = !chatParty
-                chatParty ? (channelNum = 1, chatGuild = false, chatNotice = false) : channelNum = 0
+                chatParty ? (channelNum = 1, chatGuild = false, chatNotice = false, temp = 'Party') : (channelNum = 0, temp = 'Self')
                 send(`Message to party chat ${chatParty ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 return
             }
@@ -263,7 +238,7 @@ module.exports = function RK9Helper(dispatch) {
                     return
                 } else {
                     moveLocation(RK9_DEVICE_LOCATION[p1])
-                    send(`Instant move to position <font color="#56B4E9">` + p1 + `</font><font>.</font>`)
+                    send(`Instant move to position <font color="#56B4E9">${p1}</font><font>.</font>`)
                     return
                 }
             }
@@ -278,7 +253,7 @@ module.exports = function RK9Helper(dispatch) {
                     return
                 } else {
                     moveLocation(RK9_BOSS_LOCATION[p2])
-                    send(`Instant move to boss <font color="#56B4E9">` + p2 + `</font><font> location.</font>`)
+                    send(`Instant move to boss <font color="#56B4E9">${p2}</font><font> location.</font>`)
                     return
                 }
             } else {
