@@ -34,6 +34,9 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - WARNING : `rk boss num` may cause lobby teleportals to bug and/or client to disconnect
 
 ## Changelog
+### 1.23
+- Updated code
+- Removed protocol version restriction
 ### 1.22
 - Fixed error
 - Removed redundant code
