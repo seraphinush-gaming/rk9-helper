@@ -10,17 +10,28 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
+// Version 1.23 r:00
+
+// edit here for localization
+const MSG_STRING = [
+    '근',    // IN
+    '원',    // OUT
+    '터',    // SPREAD
+]
+
 const Command = require('command')
 
 module.exports = function RK9Helper(dispatch) {
 
     const command = Command(dispatch)
 
+    // general
     let cid,
         enable = false,
         prevZone = null,
         curZone = null
 
+    // guide
     let channelNum = 0,
         chatGuild = false,
         chatNotice = false,
@@ -44,7 +55,7 @@ module.exports = function RK9Helper(dispatch) {
     })
 
     function moveLocation(loc) {
-        dispatch.toClient('S_INSTANT_MOVE', 1, {
+        dispatch.toClient('S_INSTANT_MOVE', {
             id: cid,
             x: loc[0],
             y: loc[1],
@@ -52,8 +63,9 @@ module.exports = function RK9Helper(dispatch) {
         })
     }
 
-    dispatch.hook('S_SPAWN_ME', 1, (event) => {
-        if (!enable && !(RK9_ZONE.includes(curZone))) return
+    dispatch.hook('S_SPAWN_ME', (event) => {
+        if (!enable) return
+        if (!(RK9_ZONE.includes(curZone))) return
         if (prevZone != SAVAGE_REACH) return
         if (curZone == prevZone) return
         event.x = RK9_LOBBY[0],
@@ -64,14 +76,15 @@ module.exports = function RK9Helper(dispatch) {
 
     // RK-9 Kennel (hard) last boss guide code
     dispatch.hook('S_BOSS_GAGE_INFO', (event) => {
-        if (!enable && !(RK9_ZONE.includes(curZone))) return
+        if (!enable) return
+        if (!(RK9_ZONE.includes(curZone))) return
         curBoss = event.templateId
     })
 
     dispatch.hook('S_ACTION_STAGE', (event) => {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
-        if (event.skill === START) {
+        if (event.skill === 1202128153) {
             setTimeout(mechOrder, 500)
         }
     })
@@ -80,9 +93,9 @@ module.exports = function RK9Helper(dispatch) {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
         switch (event.skill) {
-            case SECOND_IN:
-            case SECOND_OUT:
-            case SECOND_SPD:
+            case 1202128160:
+            case 1202128161:
+            case 1202128162:
                 messageA = messageB,
                 messageB = 'O'
                 break
@@ -104,15 +117,14 @@ module.exports = function RK9Helper(dispatch) {
         if (curBoss != RK9_THIRD_BOSS) return
         let messageId = parseInt(event.message.replace('@dungeon:', ''))
         switch (messageId) {
-            // edit first three cases for translation
             case 9935302:
-                messageA = '근' // IN
+                messageA = MSG_STRING[0]
                 break
             case 9935303:
-                messageA = '원' // OUT
+                messageA = MSG_STRING[1]
                 break
             case 9935304:
-                messageA = '터' // SPREAD
+                messageA = MSG_STRING[2]
                 break
             case 9935311:
                 previousMechFirst = true
@@ -126,20 +138,19 @@ module.exports = function RK9Helper(dispatch) {
         setTimeout(mechOrder, 2000)
     })
 
-    dispatch.hook('S_QUEST_BALLOON', 1, (event) => {
+    dispatch.hook('S_QUEST_BALLOON', (event) => {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
         let balloonId = parseInt(event.message.replace('@monsterBehavior:', ''))
         switch (balloonId) {
-            // edit these three cases for translation
             case 935301:
-                messageB = '근' // IN
+                messageB = MSG_STRING[0]
                 break
             case 935302:
-                messageB = '원' // OUT
+                messageB = MSG_STRING[1]
                 break
             case 935303:
-                messageB = '터' // SPREAD
+                messageB = MSG_STRING[2]
                 break
         }
     })
@@ -291,6 +302,6 @@ const FIRST_SPD = 1202128158 // first_전
 const SECOND_IN = 1202128160 // second_근
 const SECOND_OUT = 1202128161 // second_원
 const SECOND_SPD = 1202128162 // second_전
-const MSG_IN = 935301 // 근
-const MSG_OUT = 935302 // 전
-const MSG_SPD = 935303 // 원
+const QUEST_IN = 935301 // 근
+const QUEST_OUT = 935302 // 전
+const QUEST_SPD = 935303 // 원
