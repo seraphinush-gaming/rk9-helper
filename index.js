@@ -10,7 +10,7 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.23 r:01
+// Version 1.24 r:01
 
 // edit here for localization
 const MSG_STRING = [
