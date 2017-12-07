@@ -20,20 +20,16 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ### `rk party`
 - Send mechanic order in party chat
 - Default is off
-### `rk num`
-- `num` is 1 to 4, instant move to device
-### `rk lobby`
-- Instant move to lobby area
-### `rk boss num`
-- `num` is 1 to 3, instant move to boss
 
 ## Info
-- Initially made to make dismantling device easier
+- Initially made to make dismantling device easier .. does not work anymore
 - Cannot use guild chat, party chat, and/or notice chat together- adjusts automatically
 - WARNING : `rk lobby` may cause client to disconnect
 - WARNING : `rk boss num` may cause lobby teleportals to bug and/or client to disconnect
 
 ## Changelog
+### 1.3
+- Removed S_INSTANT_MOVE and obsolete commands
 ### 1.24
 - Updated code aesthetics
 ### 1.23
