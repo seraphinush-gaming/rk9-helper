@@ -4,13 +4,12 @@
 // - S_ACTION_STAGE
 // - S_BOSS_GAGE_INFO
 // - S_DUNGEON_EVENT_MESSAGE
-// - S_INSTANT_MOVE
 // - S_LOAD_TOPO
 // - S_LOGIN
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.24 r:01
+// Version 1.3 r:00
 
 // edit here for localization
 const MSG_STRING = [
@@ -54,15 +53,6 @@ module.exports = function RK9Helper(dispatch) {
         curZone = event.zone
     })
 
-    function moveLocation(loc) {
-        dispatch.toClient('S_INSTANT_MOVE', {
-            id: cid,
-            x: loc[0],
-            y: loc[1],
-            z: loc[2]
-        })
-    }
-
     dispatch.hook('S_SPAWN_ME', (event) => {
         if (!enable) return
         if (!(RK9_ZONE.includes(curZone))) return
@@ -103,11 +93,8 @@ module.exports = function RK9Helper(dispatch) {
                 return
         }
         setTimeout(() => {
-            if (channelNum != 0) {
-                sendChat(`Next : ` + messageA)
-            } else {
-                send(`Next : ` + messageA)
-            }
+            if (channelNum != 0) { sendChat(`Next : ` + messageA) } 
+            else { send(`Next : ` + messageA) }
         }, 8000)
     })
 
@@ -158,23 +145,15 @@ module.exports = function RK9Helper(dispatch) {
     // helper
     function mechOrder() {
         if (previousMechFirst) {
-            if (channelNum != 0) {
-                sendChat(messageA + ` -> ` + messageB)
-            } else {
-                send(messageA + ` -> ` + messageB)
-            }
+            if (channelNum != 0) { sendChat(messageA + ` -> ` + messageB) } 
+            else { send(messageA + ` -> ` + messageB) }
         } else {
-            if (channelNum != 0) {
-                sendChat(messageB + ` -> ` + messageA)
-            } else {
-                send(messageB + ` -> ` + messageA)
-            }
+            if (channelNum != 0) { sendChat(messageB + ` -> ` + messageA) }
+            else { send(messageB + ` -> ` + messageA) }
         }
     }
 
-    function send(msg) {
-        command.message(`[rk9-helper] : ` + msg)
-    }
+    function send(msg) { command.message(`[rk9-helper] : ` + msg) }
 
     function sendChat(msg) {
         dispatch.toServer('C_CHAT', {
@@ -242,31 +221,6 @@ module.exports = function RK9Helper(dispatch) {
             if (!(RK9_ZONE.includes(curZone))) {
                 send(`<font color="#FF0000">Invalid zone.</font>`)
                 return
-            }
-            if (!isNaN(p1)) {
-                if (p1 < 1 || p1 > 4) {
-                    send(`<font color="#FF0000">Invalid number.</font>`)
-                    return
-                } else {
-                    moveLocation(RK9_DEVICE_LOCATION[p1])
-                    send(`Instant move to position <font color="#56B4E9">${p1}</font><font>.</font>`)
-                    return
-                }
-            }
-            if (p1 == 'lobby') {
-                moveLocation(RK9_LOBBY)
-                send(`Instant move to <font color="#56B4E9">lobby</font><font>.</font>`)
-                return
-            }
-            if (p1 == 'boss' && !isNaN(p2)) {
-                if (p2 < 1 || p2 > 3) {
-                    send(`<font color="#FF0000">Invalid number.</font>`)
-                    return
-                } else {
-                    moveLocation(RK9_BOSS_LOCATION[p2])
-                    send(`Instant move to boss <font color="#56B4E9">${p2}</font><font> location.</font>`)
-                    return
-                }
             } else {
                 send(`<font color="#FF0000">Invalid argument.</font>`)
             }
