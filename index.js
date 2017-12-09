@@ -9,14 +9,7 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.3 r:00
-
-// edit here for localization
-const MSG_STRING = [
-    '근',    // IN
-    '원',    // OUT
-    '터',    // SPREAD
-]
+// Version 1.3.b r:00
 
 const Command = require('command')
 
@@ -41,6 +34,8 @@ module.exports = function RK9Helper(dispatch) {
         messageB = 'O',
         previousMechFirst = true,
         temp = 'Self'
+
+    let MSG_STRING = []
 
     // code
     dispatch.hook('S_LOGIN', (event) => {
@@ -93,7 +88,7 @@ module.exports = function RK9Helper(dispatch) {
                 return
         }
         setTimeout(() => {
-            if (channelNum != 0) { sendChat(`Next : ` + messageA) } 
+            if (channelNum != 0) { sendChat(`Next : ` + messageA) }
             else { send(`Next : ` + messageA) }
         }, 8000)
     })
@@ -145,7 +140,7 @@ module.exports = function RK9Helper(dispatch) {
     // helper
     function mechOrder() {
         if (previousMechFirst) {
-            if (channelNum != 0) { sendChat(messageA + ` -> ` + messageB) } 
+            if (channelNum != 0) { sendChat(messageA + ` -> ` + messageB) }
             else { send(messageA + ` -> ` + messageB) }
         } else {
             if (channelNum != 0) { sendChat(messageB + ` -> ` + messageA) }
@@ -162,11 +157,25 @@ module.exports = function RK9Helper(dispatch) {
         })
     }
 
+    function setMessage() {
+        if (RK9_ZONE.includes(event.zone)) {
+            // localization
+            if (dispatch.base.protocolVersion.toString() == 323767) {
+                send(`<font color="#56B4E9">KR support detected</font>`)
+                MSG_STRING = ['근', '원', '터']
+            } else {
+                send(`<font color="#56B4E9">NA support detected</font>`)
+                MSG_STRING = ['get OUT', 'get IN', 'WAVE']
+            }
+        }
+    }
+
     // command
     try {
         command.add('rk', (p1, p2) => {
             if (p1 === undefined) {
                 enable = !enable
+                if (enable) setMessage()
                 send(`RK-9 Hangar module ${enable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 send(`Status :
                     <br> - Guide : ${guideEnable}
@@ -195,7 +204,7 @@ module.exports = function RK9Helper(dispatch) {
                 }
                 chatGuild = !chatGuild
                 chatGuild ? (channelNum = 2, chatNotice = false, chatParty = false, temp = 'Guild') : (channelNum = 0, temp = 'Self')
-                send(`Message to guild chat ${chatGuild ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)    
+                send(`Message to guild chat ${chatGuild ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
                 return
             }
             if (p1 == 'notice') {
@@ -216,6 +225,13 @@ module.exports = function RK9Helper(dispatch) {
                 chatParty = !chatParty
                 chatParty ? (channelNum = 1, chatGuild = false, chatNotice = false, temp = 'Party') : (channelNum = 0, temp = 'Self')
                 send(`Message to party chat ${chatParty ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
+                return
+            }
+            if (p1 == 'test') {
+                send(`Test :
+                    <br> - ${MSG_STRING[0]}
+                    <br> - ${MSG_STRING[1]}
+                    <br> - ${MSG_STRING[2]}`)
                 return
             }
             if (!(RK9_ZONE.includes(curZone))) {
