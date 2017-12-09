@@ -9,13 +9,13 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.3.b r:00
+// Version 1.3c r:00
 
 const Command = require('command')
 
-module.exports = function RK9Helper(dispatch) {
+module.exports = function RK9Helper(d) {
 
-    const command = Command(dispatch)
+    const command = Command(d)
 
     // general
     let cid,
@@ -38,46 +38,46 @@ module.exports = function RK9Helper(dispatch) {
     let MSG_STRING = []
 
     // code
-    dispatch.hook('S_LOGIN', (event) => {
-        ({ cid } = event)
+    d.hook('S_LOGIN', (e) => {
+        ({ cid } = e)
         prevZone = null
     })
 
-    dispatch.hook('S_LOAD_TOPO', (event) => {
+    d.hook('S_LOAD_TOPO', (e) => {
         prevZone = curZone,
-        curZone = event.zone
+        curZone = e.zone
     })
 
-    dispatch.hook('S_SPAWN_ME', (event) => {
+    d.hook('S_SPAWN_ME', (e) => {
         if (!enable) return
         if (!(RK9_ZONE.includes(curZone))) return
         if (prevZone != SAVAGE_REACH) return
         if (curZone == prevZone) return
-        event.x = RK9_LOBBY[0],
-        event.y = RK9_LOBBY[1],
-        event.z = RK9_LOBBY[2]
+        e.x = RK9_LOBBY[0],
+        e.y = RK9_LOBBY[1],
+        e.z = RK9_LOBBY[2]
         return true
     })
 
     // RK-9 Kennel (hard) last boss guide code
-    dispatch.hook('S_BOSS_GAGE_INFO', (event) => {
+    d.hook('S_BOSS_GAGE_INFO', (e) => {
         if (!enable) return
         if (!(RK9_ZONE.includes(curZone))) return
-        curBoss = event.templateId
+        curBoss = e.templateId
     })
 
-    dispatch.hook('S_ACTION_STAGE', (event) => {
+    d.hook('S_ACTION_STAGE', (e) => {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
-        if (event.skill === 1202128153) {
+        if (e.skill === 1202128153) {
             setTimeout(mechOrder, 500)
         }
     })
 
-    dispatch.hook('S_ACTION_END', (event) => {
+    d.hook('S_ACTION_END', (e) => {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
-        switch (event.skill) {
+        switch (e.skill) {
             case 1202128160:
             case 1202128161:
             case 1202128162:
@@ -94,10 +94,10 @@ module.exports = function RK9Helper(dispatch) {
     })
 
     // initial message hook
-    dispatch.hook('S_DUNGEON_EVENT_MESSAGE', (event) => {
+    d.hook('S_DUNGEON_EVENT_MESSAGE', (e) => {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
-        let messageId = parseInt(event.message.replace('@dungeon:', ''))
+        let messageId = parseInt(e.message.replace('@dungeon:', ''))
         switch (messageId) {
             case 9935302:
                 messageA = MSG_STRING[0]
@@ -120,10 +120,10 @@ module.exports = function RK9Helper(dispatch) {
         setTimeout(mechOrder, 2000)
     })
 
-    dispatch.hook('S_QUEST_BALLOON', (event) => {
+    d.hook('S_QUEST_BALLOON', (e) => {
         if (!guideEnable) return
         if (curBoss != RK9_THIRD_BOSS) return
-        let balloonId = parseInt(event.message.replace('@monsterBehavior:', ''))
+        let balloonId = parseInt(e.message.replace('@monsterBehavior:', ''))
         switch (balloonId) {
             case 935301:
                 messageB = MSG_STRING[0]
@@ -148,25 +148,20 @@ module.exports = function RK9Helper(dispatch) {
         }
     }
 
-    function send(msg) { command.message(`[rk9-helper] : ` + msg) }
-
     function sendChat(msg) {
-        dispatch.toServer('C_CHAT', {
+        d.toServer('C_CHAT', {
             channel: channelNum, // 1 = party, 2 = guild, 21 = party notice
             message: msg
         })
     }
 
     function setMessage() {
-        if (RK9_ZONE.includes(event.zone)) {
-            // localization
-            if (dispatch.base.protocolVersion.toString() == 323767) {
-                send(`<font color="#56B4E9">KR support detected</font>`)
-                MSG_STRING = ['근', '원', '터']
-            } else {
-                send(`<font color="#56B4E9">NA support detected</font>`)
-                MSG_STRING = ['get OUT', 'get IN', 'WAVE']
-            }
+        if (d.base.protocolVersion.toString() == 323767) {
+            send(`<font color="#56B4E9">KR support detected</font>`)
+            MSG_STRING = ['근', '원', '터']
+        } else {
+            send(`<font color="#56B4E9">NA support detected</font>`)
+            MSG_STRING = ['get OUT', 'get IN', 'WAVE']
         }
     }
 
@@ -241,9 +236,8 @@ module.exports = function RK9Helper(dispatch) {
                 send(`<font color="#FF0000">Invalid argument.</font>`)
             }
         })
-    } catch (e) {
-        console.log(`[ERROR] -- rk9-helper module --`)
-    }
+        function send(msg) { command.message(`[rk9-helper] : ` + msg) }
+    } catch (e) { console.log(`[ERROR] -- rk9-helper module --`) }
 
 }
 
