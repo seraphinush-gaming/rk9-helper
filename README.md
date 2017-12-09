@@ -26,6 +26,8 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - Cannot use guild chat, party chat, and/or notice chat together- adjusts automatically
 
 ## Changelog
+### 1.3d
+- Rearranged code
 ### 1.3c
 - Fixed error
 - Updated code aesthetics
