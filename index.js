@@ -9,7 +9,7 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.3c r:00
+// Version 1.3d r:00
 
 const Command = require('command')
 
@@ -170,8 +170,8 @@ module.exports = function RK9Helper(d) {
         command.add('rk', (p1, p2) => {
             if (p1 === undefined) {
                 enable = !enable
-                if (enable) setMessage()
                 send(`RK-9 Hangar module ${enable ? '<font color="#56B4E9">enabled</font>' : '<font color="#E69F00">disabled</font>'}<font>.</font>`)
+                if (enable) setMessage()
                 send(`Status :
                     <br> - Guide : ${guideEnable}
                     <br> - Message to : ${temp}`)
