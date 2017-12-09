@@ -20,6 +20,8 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ### `rk party`
 - Send mechanic order in party chat
 - Default is off
+### `rk test`
+- Test display messages to be sent
 
 ## Info
 - Initially made to make dismantling device easier .. does not work anymore
@@ -33,6 +35,7 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - Updated code aesthetics
 ### 1.3b
 - Added localization for KR and non-KR regions
+- Added `test` command
 ### 1.3
 - Removed S_INSTANT_MOVE and obsolete commands
 ### 1.24
