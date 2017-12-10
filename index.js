@@ -20,7 +20,14 @@ const Command = require('command'),
   KOREAN_VER = 323767
 
 module.exports = function RK9Helper(d) {
-  const command = Command(d)
+  const command = Command(d),
+    RESPONSES = {
+      9935302: () => { messageA = MECH_STRINGS[0] },
+      9935303: () => { messageA = MECH_STRINGS[1] },
+      9935304: () => { messageA = MECH_STRINGS[2] },
+      9935311: () => { prevMechFirst = true },
+      9935312: () => { prevMechFirst = false }
+    }
 
   let cid, enabled = false,
     // Guide
@@ -154,12 +161,4 @@ const SAVAGE_REACH = 7031,
   SECOND_SPD = 1202128162, // second_전
   QUEST_IN = 935301, // 근
   QUEST_OUT = 935302, // 전
-  QUEST_SPD = 935303, // 원
-
-  RESPONSES = {
-    9935302: () => { messageA = MECH_STRINGS[0] },
-    9935303: () => { messageA = MECH_STRINGS[1] },
-    9935304: () => { messageA = MECH_STRINGS[2] },
-    9935311: () => { prevMechFirst = true },
-    9935312: () => { prevMechFirst = false }
-  }
+  QUEST_SPD = 935303 // 원
