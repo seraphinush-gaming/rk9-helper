@@ -20,15 +20,8 @@ const Command = require('command'),
   KOREAN_VER = 323767
 
 module.exports = function RK9Helper(d) {
-  const command = Command(d),
-    RESPONSES = {
-      9935302: () => { messageA = MECH_STRINGS[0] },
-      9935303: () => { messageA = MECH_STRINGS[1] },
-      9935304: () => { messageA = MECH_STRINGS[2] },
-      9935311: () => { prevMechFirst = true },
-      9935312: () => { prevMechFirst = false }
-    }
-
+  const command = Command(d)
+    
   let cid, enabled = false,
     // Guide
     prevZone, curZone,
@@ -85,7 +78,14 @@ module.exports = function RK9Helper(d) {
   d.hook('S_DUNGEON_EVENT_MESSAGE', (e) => {
     if (!enabled || curBoss !== RK9_THIRD_BOSS) return
     let messageId = parseInt(e.message.replace('@dungeon:', ''))
-    if (messageId in RESPONSES) {
+    const responses = {
+      9935302: () => { messageA = MECH_STRINGS[0] },
+      9935303: () => { messageA = MECH_STRINGS[1] },
+      9935304: () => { messageA = MECH_STRINGS[2] },
+      9935311: () => { prevMechFirst = true },
+      9935312: () => { prevMechFirst = false }
+    }
+    if (messageId in responses) {
       RESPONSES[messageId]()
       setTimeout(mechOrder, 2000)
     }
