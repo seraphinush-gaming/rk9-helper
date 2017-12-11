@@ -22,7 +22,8 @@ const Command = require('command'),
 module.exports = function RK9Helper(d) {
   const command = Command(d)
     
-  let cid, enabled = false,
+  let enabled = false,
+    cid, name, 
     // Guide
     prevZone, curZone,
     curBoss, channelNum,
@@ -40,7 +41,7 @@ module.exports = function RK9Helper(d) {
   })
 
   d.hook('S_LOGIN', (e) => {
-      ({ cid } = e)
+      ({ cid, name } = e)
       curBoss = prevZone = null
   })
 
@@ -105,8 +106,8 @@ module.exports = function RK9Helper(d) {
 
   function toChat(msg) {
     if (channelNum) d.toServer('C_CHAT', {
-        channel: channelNum,
-        message: msg
+      channel: channelNum,
+      message: msg
     })
     else send(msg)
   }
@@ -129,7 +130,7 @@ module.exports = function RK9Helper(d) {
       else if (arg in CHANNELS) {
         recipient = arg.charAt(0).toUpperCase() + arg.slice(1)
         channelNum = CHANNELS[arg]
-        statusMsg()
+        send(`Message to ${channelNum? recipient : name}`)
       }
       else send('Invalid argument.'.clr('FF0000'))
     })
@@ -142,8 +143,8 @@ module.exports = function RK9Helper(d) {
 
   function statusMsg() {
     sendLines('Status :',
-      `Guide ${enabled? 'On' : 'Off'}`,
-      `Message to ${channelNum? recipient : 'Self'}`)
+      `${enabled? 'Enabled'.clr('56B4E9') : 'Disabled'.clr('E69F00')}`,
+      `Message to ${channelNum? recipient : name}`)
   }
 }
 
