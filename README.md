@@ -6,9 +6,7 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - Toggle on/off
 - Default is off
 ### `rk status`
-- Send status of guide and messenger
-### `rk guide`
-- Toggle RK-9 Kennel (hard) mechanic guide on/off
+- Send status of helper and messenger
 - Default is on
 ### `rk guild`
 - Send mechanic order in guild chat
@@ -20,14 +18,16 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ### `rk party`
 - Send mechanic order in party chat
 - Default is off
-### `rk test`
-- Test display messages to be sent
 
 ## Info
 - Initially made to make dismantling device easier .. does not work anymore
 - Cannot use guild chat, party chat, and/or notice chat together- adjusts automatically
 
 ## Changelog
+### 1.3f
+- Updated code aesthetics
+- Removed `guide` command
+- Removed `test` command
 ### 1.3e
 - Merged pull request
 ### 1.3d
