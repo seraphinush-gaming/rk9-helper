@@ -68,7 +68,7 @@ module.exports = function RK9Helper(d) {
 
     d.hook('S_SPAWN_ME', (e) => {
         if (!RK9_ZONE.includes(curZone) || prevZone !== SAVAGE_REACH || curZone === prevZone) return
-        e = { ...e, ...RK9_LOBBY }
+        Object.assign(e, RK9_LOBBY)
         return true
     })
 
