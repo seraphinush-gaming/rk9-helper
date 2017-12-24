@@ -10,9 +10,9 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.3f r:00
+// Version 1.40 r:00
 
-const KTERA = 323767
+const KTERA = 323464
 const Command = require('command')
 
 const 
@@ -24,9 +24,6 @@ const
     SECOND_IN = 1202128160,
     SECOND_OUT = 1202128161,
     SECOND_WAVE = 1202128162
-
-// For a certain color OCD baka. ex: 'seraphinudez'.clr('BADA55')
-String.prototype.clr = function (hexColor) { return `<font color="#${hexColor}">${this}</font>` }
 
 module.exports = function RK9Helper(d) {
 
@@ -129,18 +126,9 @@ module.exports = function RK9Helper(d) {
         else send(msg)
     }
 
-    function send(msg) { command.message(`[rk9-helper] : ` + msg) }
-    
-    function sendLines() { send([...arguments].join('\n\t - ')) }
-    
-    function statusMsg() {
-        sendLines(`Status : ${enabled ? 'Enabled'.clr('56B4E9') : 'Disabled'.clr('E69F00')}`,
-            `Message to : ` + `${channelNum ? recipient : name}`.clr('56B4E9'))
-    }
-
     // command
     const COMMANDS = {
-        status: () => { statusMsg() }
+        status: () => { status() }
     }
     // channel
     const CHANNELS = { self: 0, party: 1, guild: 2, notice: 22 }
@@ -149,7 +137,7 @@ module.exports = function RK9Helper(d) {
         command.add('rk', (arg) => {
             if (!arg) {
                 enabled = !enabled
-                statusMsg()
+                status()
             } 
             else if ((arg = arg.toLowerCase()) in COMMANDS) COMMANDS[arg]()
             else if (arg in CHANNELS) {
@@ -159,9 +147,18 @@ module.exports = function RK9Helper(d) {
             }
             else send(`Invalid argument.`.clr('FF0000'))
         })
+        function send(msg) { command.message(`[rk9-helper] : ` + [...arguments].join('\n\t - ')) }
+        function status() { send(
+                `RK-9 Helper ${enabled ? 'enabled'.clr('7FFF7F') : 'disabled'.clr('E69F00')}` + `.`.clr('FFFFFF'),
+                `Message to : ${channelNum ? recipient : name}`,
+                `Messages : ${MECH_STRINGS}`)
+        }
     } catch (e) { console.error(`[ERROR] -- rk9-helper module --`) }
 
 }
+
+// credit : https://github.com/Some-AV-Popo
+String.prototype.clr = function (hexColor) { return `<font color="#${hexColor}">${this}</font>` }
 
 // miscellaneous
 const 
