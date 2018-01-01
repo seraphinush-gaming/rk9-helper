@@ -10,7 +10,7 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.40 r:00
+// Version 1.41 r:00
 
 const KTERA = 323464
 const Command = require('command')
@@ -149,7 +149,7 @@ module.exports = function RK9Helper(d) {
         })
         function send(msg) { command.message(`[rk9-helper] : ` + [...arguments].join('\n\t - ')) }
         function status() { send(
-                `RK-9 Helper ${enabled ? 'enabled'.clr('7FFF7F') : 'disabled'.clr('E69F00')}` + `.`.clr('FFFFFF'),
+                `RK-9 Helper ${enabled ? 'enabled'.clr('56B4E9') : 'disabled'.clr('E69F00')}` + `.`.clr('FFFFFF'),
                 `Message to : ${channelNum ? recipient : name}`,
                 `Messages : ${MECH_STRINGS}`)
         }
