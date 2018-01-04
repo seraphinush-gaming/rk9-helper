@@ -10,9 +10,9 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.41 r:00
+// Version 1.42 r:00
 
-const KTERA = 323464
+const KTERA = 324044
 const Command = require('command')
 
 const 
