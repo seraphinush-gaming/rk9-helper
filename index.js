@@ -10,13 +10,12 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.42 r:00
+// Version 1.42 r:01
 
 const KTERA = 324044
 const Command = require('command')
 
 const 
-    SAVAGE_REACH = 7031,
     RK9_THIRD_BOSS = 3000,
     RK9_ZONE = [9735, 9935],
     RK9_LOBBY = { x: -41429.887, y: 40626.555, z: -950.874 },
@@ -64,7 +63,7 @@ module.exports = function RK9Helper(d) {
     })
 
     d.hook('S_SPAWN_ME', (e) => {
-        if (!RK9_ZONE.includes(curZone) || prevZone !== SAVAGE_REACH || curZone === prevZone) return
+        if (!RK9_ZONE.includes(curZone) || curZone === prevZone) return
         Object.assign(e, RK9_LOBBY)
         return true
     })
@@ -162,6 +161,8 @@ String.prototype.clr = function (hexColor) { return `<font color="#${hexColor}">
 
 // miscellaneous
 const 
+    SAVAGE_REACH = 7031,
+    
     FIRST_IN = 1202128156,
     FIRST_OUT = 1202128157,
     FIRST_WAVE = 1202128158,
