@@ -24,7 +24,7 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ## Info
 - Initially made to make deactivating device easier .. does not work anymore
 - Cannot use guild chat, party chat, and/or notice chat together -- adjusts automatically
-- If you need more help than what this module can offer .. feel free to use [rk9guide by shinoyx](https://github.com/Shinoyx/rk9guide)
+- If you need more help than what this module can offer .. feel free to use [rk9guide by Shinoyx](https://github.com/Shinoyx/rk9guide)
 
 ## Changelog
 <details>
