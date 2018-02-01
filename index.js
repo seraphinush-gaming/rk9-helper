@@ -10,9 +10,9 @@
 // - S_QUEST_BALLOON
 // - S_SPAWN_ME
 
-// Version 1.42 r:01
+// Version 1.43 r:00
 
-const KTERA = 324044
+const KTERA = [324044, 325714]
 const Command = require('command')
 
 const 
@@ -48,7 +48,7 @@ module.exports = function RK9Helper(d) {
 
     // message language
     d.hookOnce('S_LOAD_CLIENT_USER_SETTING', () => {
-        MECH_STRINGS = d.base.protocolVersion === KTERA ?
+        MECH_STRINGS = (KTERA.includes(d.base.protocolVersion)) ?
             ['근', '원', '터'] : ['get OUT', 'get IN', 'WAVE']
     })
 
