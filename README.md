@@ -29,6 +29,8 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 ## Changelog
 <details>
 
+    1.43
+    - K TERA update
     1.42
     - K TERA : Season 8 update
     1.41
