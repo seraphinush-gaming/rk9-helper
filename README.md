@@ -22,7 +22,7 @@ tera-proxy module to help inside TERA dungeon `RK-9 Kennel`
 - Send status of helper and messenger
 
 ## Info
-- **Thank you for using this module. this module will no longer update**
+- **Thank you for using this module. this module has been finalized and will no longer update**
 - Initially made to make deactivating device easier .. does not work anymore
 - Cannot use guild chat, party chat, and/or notice chat together -- adjusts automatically
 - If you need more help than what this module can offer .. feel free to use [rk9guide by Shinoyx](https://github.com/Shinoyx/rk9guide)
